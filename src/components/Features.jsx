@@ -1,40 +1,53 @@
 import styles from './Features.module.css'
+import { GlobeIcon, RadarIcon, LockIcon, DevicesIcon, ArrowRightIcon } from './Icons'
+import useLang from '../i18n/useLang'
 
-const features = [
-  { icon: '🌍', title: 'Global Reach', desc: 'Works wherever you are across the globe.', color: '#2563eb' },
-  { icon: '🛡️', title: 'Smart Detection', desc: 'Advanced scanning detects zero-day threats in real time.', color: '#22c55e' },
-
-  { icon: '🔒', title: '99.9% Detection', desc: 'Industry-leading threat detection rate, certified globally.', color: '#22c55e' },
-  { icon: '📱', title: 'Multi-Platform', desc: 'Android, Windows, and Mac — all covered under one plan.', color: '#2563eb' },
+const featureStyles = [
+  { Icon: GlobeIcon, color: '#0ea5e9' },
+  { Icon: RadarIcon, color: '#16a34a' },
+  { Icon: LockIcon, color: '#16a34a' },
+  { Icon: DevicesIcon, color: '#0ea5e9' },
 ]
 
 export default function Features() {
+  const { t } = useLang()
+  const f = t.features
+
   return (
     <section className={styles.section} id="features">
-      <div className={styles.header}>
-        <p className={styles.eyebrow}>Why BinaryShield</p>
-        <h2 className={styles.title}>Built for the Modern World</h2>
-        <p className={styles.sub}>Powerful features that work together seamlessly.</p>
+      <div className={styles.header} data-reveal>
+        <p className={styles.eyebrow}>{f.eyebrow}</p>
+        <h2 className={styles.title}>{f.title}</h2>
+        <p className={styles.sub}>{f.sub}</p>
       </div>
+
       <div className={styles.grid}>
-        {features.map(f => (
-          <div key={f.title} className={styles.card}>
-            <div className={styles.icon} style={{ background: `${f.color}18`, border: `1px solid ${f.color}33` }}>
-              {f.icon}
+        {f.items.map((item, i) => {
+          const { Icon, color } = featureStyles[i]
+          return (
+            <div
+              key={i}
+              className={styles.card}
+              data-reveal
+              style={{ '--c': color, '--reveal-delay': `${i * 0.08}s` }}
+            >
+              <div className={styles.icon}><Icon size={22} /></div>
+              <h3 className={styles.cardTitle}>{item.title}</h3>
+              <p className={styles.cardDesc}>{item.desc}</p>
             </div>
-            <h3 className={styles.cardTitle} style={{ color: f.color }}>{f.title}</h3>
-            <p className={styles.cardDesc}>{f.desc}</p>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
-
-
-      <div className={styles.cta}>
+      <div className={styles.cta} data-reveal>
         <div className={styles.ctaBox}>
-          <h3>Ready to get the bundle?</h3>
+          <div className={styles.ctaGlow} />
+          <h3>{f.ctaTitle}</h3>
           <div className={styles.ctaBtns}>
-            <button className={styles.btnMain}>Start Free Trial</button>
+            <a href="https://wifi.vault-x.world/register" target="_blank" rel="noopener noreferrer" className={styles.btnMain}>
+              {f.getStarted} <ArrowRightIcon size={18} />
+            </a>
+            <a href="#pricing" className={styles.btnGhost}>{f.viewPricing}</a>
           </div>
         </div>
       </div>

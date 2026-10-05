@@ -1,134 +1,79 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './Preloader.module.css'
+import { WifiIcon, ShieldIcon, CheckIcon } from './Icons'
+import useLang from '../i18n/useLang'
 
-const logo = '/Binaryshieldlogo.png'
+const logo = '/BinaryShieldlogo.png'
 
-const RING_SIZE = 240
-const RING_RADIUS = 110
-const CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS
-
-const steps = [
-  { label: 'Boosting WiFi', at: 0 },
-  { label: 'Scanning Threats', at: 35 },
-  { label: 'Securing', at: 70 },
-]
-
-function statusText(progress) {
-  if (progress >= 100) return 'You\'re connected & protected'
-  if (progress >= 70) return 'Securing your connection...'
-  if (progress >= 35) return 'Scanning for threats...'
-  return 'Boosting WiFi signal...'
-}
+const DURATION = 2000
 
 export default function Preloader({ onDone }) {
+  const { t } = useLang()
   const [progress, setProgress] = useState(0)
   const [fading, setFading] = useState(false)
 
-  const columns = useMemo(() =>
-    Array.from({ length: 22 }, (_, i) => ({
-      left: `${(i / 22) * 100 + Math.random() * 2}%`,
-      duration: `${6 + Math.random() * 6}s`,
-      delay: `${-Math.random() * 10}s`,
-      digits: Array.from({ length: 30 }, () => (Math.random() > 0.5 ? '1' : '0')).join('\n'),
-    })), [])
-
   useEffect(() => {
-    const duration = 5000
-    const interval = 50
-    const step = (interval / duration) * 100
+    const interval = 30
+    const step = (interval / DURATION) * 100
+    let fadeTimer
     const timer = setInterval(() => {
       setProgress(prev => {
         if (prev + step >= 100) {
           clearInterval(timer)
           setFading(true)
-          setTimeout(onDone, 600)
+          fadeTimer = setTimeout(onDone, 600)
           return 100
         }
         return prev + step
       })
     }, interval)
-    return () => clearInterval(timer)
+    return () => {
+      clearInterval(timer)
+      clearTimeout(fadeTimer)
+    }
   }, [onDone])
 
+  const steps = [
+    { label: t.preloader.boosting, Icon: WifiIcon, done: progress >= 50, active: progress < 50 },
+    { label: t.preloader.scanning, Icon: ShieldIcon, done: progress >= 100, active: progress >= 50 && progress < 100 },
+  ]
+
   return (
-    <div className={`${styles.overlay} ${fading ? styles.fade : ''}`}>
-      <div className={styles.rain} aria-hidden="true">
-        {columns.map((c, i) => (
-          <span
-            key={i}
-            className={styles.column}
-            style={{ left: c.left, animationDuration: c.duration, animationDelay: c.delay }}
-          >
-            {c.digits}
-          </span>
-        ))}
-      </div>
+    <div className={`${styles.overlay} ${fading ? styles.fade : ''}`} role="status" aria-label={t.preloader.loading}>
+      <div className={styles.grid} aria-hidden="true" />
+      <div className={`${styles.blob} ${styles.blobBlue}`} aria-hidden="true" />
+      <div className={`${styles.blob} ${styles.blobGreen}`} aria-hidden="true" />
 
       <div className={styles.content}>
-        <div className={styles.ringWrap}>
-          <div className={styles.pulse} />
-          <div className={styles.pulse} />
-          <div className={styles.pulse} />
-          <div className={styles.glow} />
-
-          <svg className={styles.ring} viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}>
-            <defs>
-              <linearGradient id="preloaderRing" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#2563eb" />
-                <stop offset="100%" stopColor="#22d3ee" />
-              </linearGradient>
-            </defs>
-            <circle
-              className={styles.track}
-              cx={RING_SIZE / 2}
-              cy={RING_SIZE / 2}
-              r={RING_RADIUS}
-              fill="none"
-              strokeWidth="4"
-            />
-            <circle
-              className={styles.progress}
-              cx={RING_SIZE / 2}
-              cy={RING_SIZE / 2}
-              r={RING_RADIUS}
-              fill="none"
-              stroke="url(#preloaderRing)"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeDasharray={CIRCUMFERENCE}
-              strokeDashoffset={CIRCUMFERENCE * (1 - progress / 100)}
-            />
-          </svg>
-
-          <img src={logo} alt="BinaryShield" className={styles.logo} />
+        <div className={styles.logoWrap}>
+          <div className={styles.halo} aria-hidden="true" />
+          <img src={logo} alt="Binary Shield" className={styles.logo} />
+          <div className={styles.shine} style={{ '--logo': `url(${logo})` }} aria-hidden="true" />
         </div>
 
-        <div className={styles.readout}>
-          <div className={styles.percent}>
-            {Math.round(progress)}<span>%</span>
+        <p className={styles.tagline}>{t.preloader.tagline}</p>
+
+        <div className={styles.progress}>
+          <div className={styles.track}>
+            <div className={styles.bar} style={{ width: `${progress}%` }} />
           </div>
-          <div className={styles.status}>{statusText(progress)}</div>
+          <span className={styles.percent}>{Math.round(progress)}%</span>
         </div>
 
         <div className={styles.steps}>
-          {steps.map((s, i) => {
-            const next = steps[i + 1]?.at ?? 100
-            const done = progress >= next
-            const active = !done && progress >= s.at
-            return (
-              <div
-                key={s.label}
-                className={`${styles.step} ${active ? styles.active : ''} ${done ? styles.done : ''}`}
-              >
-                <span className={styles.stepIcon}>{done ? '✓' : ''}</span>
-                {s.label}
-              </div>
-            )
-          })}
+          {steps.map(({ label, Icon, done, active }) => (
+            <span
+              key={label}
+              className={`${styles.step} ${done ? styles.done : ''} ${active ? styles.active : ''}`}
+            >
+              <span className={styles.stepIcon}>
+                {done ? <CheckIcon size={12} strokeWidth={3} /> : <Icon size={13} />}
+              </span>
+              {label}
+            </span>
+          ))}
         </div>
       </div>
-
-      <div className={styles.tagline}>Connect Faster. Stay Protected.</div>
     </div>
   )
 }

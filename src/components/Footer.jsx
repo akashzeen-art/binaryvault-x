@@ -1,25 +1,27 @@
 import styles from './Footer.module.css'
-const logo = '/Binaryshieldlogo.png'
+import useLang from '../i18n/useLang'
+
+const logo = '/BinaryShieldlogo.png'
 
 export default function Footer() {
+  const { t } = useLang()
+
   return (
     <footer className={styles.footer}>
+      <div className={styles.glowBlue} />
+      <div className={styles.glowGreen} />
       <div className={styles.inner}>
-        <img src={logo} alt="BinaryShield" className={styles.logoImg} />
-        <p className={styles.tagline}>Connect faster. Stay protected.</p>
-
-        <div className={styles.divider} />
-
-        <h4 className={styles.colTitle}>Products</h4>
-        <div className={styles.links}>
-          <a href="https://wifi.vault-x.world/" target="_blank" rel="noopener noreferrer">WiFi Extender</a>
-          <a href="https://antivirus.vault-x.world" target="_blank" rel="noopener noreferrer">Shield Antivirus</a>
-          <a href="#">Bundle Deal</a>
+        <div className={styles.brandRow}>
+          <span className={styles.logoBadge}>
+            <img src={logo} alt="Binary Shield" className={styles.logoImg} />
+          </span>
+          <span className={styles.brand}>{t.footer.brandFirst} <span>{t.footer.brandSecond}</span></span>
         </div>
+        <p className={styles.tagline}>{t.footer.tagline}</p>
+      </div>
 
-        <div className={styles.divider} />
-
-        <p className={styles.copy}>© 2026 BinaryShield. All rights reserved.</p>
+      <div className={styles.bottom}>
+        <p className={styles.copy}>© {new Date().getFullYear()} {t.footer.brandFirst} {t.footer.brandSecond}. {t.footer.rights}</p>
       </div>
     </footer>
   )
