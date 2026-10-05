@@ -1,0 +1,206 @@
+.section {
+  padding: 6rem 4rem;
+  background: var(--white);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--blue), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.sub { color: var(--muted); font-size: 1rem; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover { transform: translateY(-6px); }
+
+.wifiCard:hover { box-shadow: 0 24px 60px rgba(37,99,235,0.15); }
+.vaultCard:hover { box-shadow: 0 24px 60px rgba(34,197,94,0.15); }
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.iconWrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.tagRow { display: flex; gap: 0.5rem; }
+
+.tag {
+  padding: 0.3rem 0.8rem;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.cardTitle {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.cardHeadline {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-top: -0.75rem;
+}
+
+.cardDesc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.check { font-weight: 700; font-size: 0.9rem; }
+
+.metaRow {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  background: rgba(37,99,235,0.04);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.metaStat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.metaNum {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.metaLabel {
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.platforms {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.platform {
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.btnWifi, .btnVault {
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  border: none;
+  color: #fff;
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.btnWifi { background: linear-gradient(135deg, var(--blue), var(--blue-dark)); box-shadow: 0 4px 16px rgba(37,99,235,0.25); }
+.btnVault { background: linear-gradient(135deg, var(--green), var(--green-dark)); box-shadow: 0 4px 16px rgba(34,197,94,0.25); }
+
+.btnWifi:hover, .btnVault:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.statusBar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@media (max-width: 768px) {
+  .section { padding: 4rem 1.5rem; }
+  .grid { grid-template-columns: 1fr; }
+}
